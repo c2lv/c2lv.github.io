@@ -1,0 +1,288 @@
+---
+/**
+ * 건조 줄에 집게로 걸어 둔 인화 사진 한 장.
+ * 중요도 1 = 지갑 사진(작게), 2 = 보통 인화, 3 = 나무 액자에 넣은 사진.
+ */
+import { formatDay, isoDay, tiltOf, type Era, type TimelineItem } from '../lib/archive';
+import Photo from './Photo.astro';
+
+interface Props {
+  item: TimelineItem;
+  era: Era;
+}
+
+const { item, era } = Astro.props;
+const { event, no, newYear } = item;
+const { title, date, summary, place, importance, tags } = event.data;
+---
+
+<li class="event" id={event.id} data-importance={importance} style={`--tilt: ${tiltOf(no)}deg`}>
+  <span class="clip" aria-hidden="true"></span>
+  {newYear && <span class="year-tag" aria-hidden="true">{newYear}</span>}
+
+  <article class="print">
+    <Photo event={event} era={era} widths={[400, 800]} sizes="(min-width: 900px) 320px, 90vw" />
+    <div class="caption">
+      <h3 class="title">
+        <a href={`/events/${event.id}/`}>{title}</a>
+      </h3>
+      <p class="when">
+        <time datetime={isoDay(date)}>{formatDay(date)}</time>
+        {place && <span class="place">{place}에서</span>}
+      </p>
+      <p class="summary">{summary}</p>
+      {
+        tags.length > 0 && (
+          <ul class="tags" aria-label="태그">
+            {tags.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </article>
+</li>
+
+<style>
+  .event {
+    --w: 100%;
+    --frame: #4a3322; /* 나무 액자 */
+    position: relative;
+    list-style: none;
+    padding-left: calc(var(--rail-x) * 2 + var(--space-2));
+    scroll-margin-top: var(--space-16);
+  }
+
+  /* 건조 집게 (세로 모드: 왼쪽 줄에서 사진 왼쪽 위를 문다) */
+  .clip {
+    position: absolute;
+    z-index: 3;
+    left: calc(var(--rail-x) - 7px);
+    top: var(--space-6);
+    width: 14px;
+    height: 26px;
+    border-radius: 3px 3px 2px 2px;
+    background: linear-gradient(to right, var(--clip) 0 45%, color-mix(in srgb, var(--clip) 70%, white) 45% 55%, var(--clip) 55%);
+    box-shadow: 1px 2px 3px rgb(0 0 0 / 0.4);
+  }
+
+  /* 연도가 바뀌는 첫 사진: 줄에 매단 종이 꼬리표 */
+  .year-tag {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    padding: 0 var(--space-3);
+    background: var(--envelope);
+    color: var(--envelope-ink);
+    font-family: var(--font-sign);
+    font-size: 18px;
+    line-height: 1.6;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+    padding-left: var(--space-4);
+  }
+
+  /* ---------- 인화 사진 ---------- */
+
+  .print {
+    position: relative;
+    padding: 10px 10px 0;
+    background: var(--paper);
+    color: var(--ink);
+    transform: rotate(var(--tilt));
+    transform-origin: 30px 0;
+    box-shadow:
+      0 1px 1px rgb(0 0 0 / 0.25),
+      0 12px 24px -12px rgb(0 0 0 / 0.6);
+  }
+
+  /* 사진을 집으면(마우스 올림, 포커스) 똑바로 선다 */
+  @media (prefers-reduced-motion: no-preference) {
+    .print {
+      transition: transform 0.3s cubic-bezier(0.3, 0.7, 0.3, 1);
+    }
+
+    .event:hover .print,
+    .event:focus-within .print {
+      transform: rotate(0deg);
+    }
+  }
+
+  .caption {
+    padding: var(--space-3) var(--space-1) var(--space-4);
+  }
+
+  .title {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  /* 사진 전체를 클릭 영역으로 */
+  .title a {
+    text-decoration: none;
+  }
+
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .title a:focus-visible {
+    outline: none;
+  }
+
+  .event:focus-within .print {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .when {
+    margin-top: var(--space-1);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .place {
+    margin-left: var(--space-2);
+  }
+
+  .summary {
+    margin-top: var(--space-2);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .tags li {
+    padding: 0 var(--space-2);
+    border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+    border-radius: 999px;
+  }
+
+  /* 중요도 1: 지갑 사진 */
+  .event[data-importance='1'] .print {
+    padding: 7px 7px 0;
+  }
+
+  .event[data-importance='1'] .title {
+    font-size: 18px;
+  }
+
+  .event[data-importance='1'] .summary {
+    font-size: 13px;
+  }
+
+  /* 중요도 3: 나무 액자 + 흰 매트 */
+  .event[data-importance='3'] .print {
+    padding: 18px 18px 0;
+    border: 10px solid var(--frame);
+    box-shadow:
+      inset 0 0 0 1px rgb(0 0 0 / 0.15),
+      0 1px 1px rgb(0 0 0 / 0.3),
+      0 18px 30px -12px rgb(0 0 0 / 0.7);
+  }
+
+  .event[data-importance='3'] .title {
+    font-size: 27px;
+  }
+
+  /* ---------- 가로 모드: 줄 위아래로 번갈아 건 사진 ---------- */
+
+  /*
+   * 사진 폭은 화면 높이에 맞춘다: 줄 위아래 각 절반 안에 사진 한 장이 다 들어가야 한다.
+   * 세로 640px에서 중요도 1/2/3 = 약 210/260/260px, 넓은 화면에서 최대 240/290/340px.
+   */
+  :global(html.is-horizontal) .event {
+    --w: clamp(240px, calc(44vh - 22px), 290px);
+    flex: none;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    width: var(--w);
+    height: 100%;
+    padding: 0;
+  }
+
+  :global(html.is-horizontal) .event[data-importance='1'] {
+    --w: clamp(200px, calc(36vh - 20px), 240px);
+  }
+
+  :global(html.is-horizontal) .event[data-importance='3'] {
+    --w: clamp(260px, calc(52vh - 72px), 340px);
+  }
+
+  :global(html.is-horizontal) .event[data-importance='3'] .print {
+    padding: 12px 12px 0;
+  }
+
+  /* 이웃 사진끼리 위아래로 겹쳐 한 화면에 더 많이 건다 */
+  :global(html.is-horizontal) .event + .event {
+    margin-left: -84px;
+  }
+
+  /* 홀수: 줄 위에 세워 아래쪽을 집게로, 짝수: 줄 아래로 늘어뜨려 위쪽을 집게로 */
+  :global(html.is-horizontal) .print {
+    grid-row: 1;
+    align-self: end;
+    margin-bottom: 10px;
+    transform-origin: 30px 100%;
+  }
+
+  :global(html.is-horizontal) .event:nth-child(even) .print {
+    grid-row: 2;
+    align-self: start;
+    margin-bottom: 0;
+    margin-top: 10px;
+    transform-origin: 30px 0;
+  }
+
+  :global(html.is-horizontal) .clip {
+    left: 24px;
+    top: calc(50% - 20px);
+  }
+
+  :global(html.is-horizontal) .event:nth-child(even) .clip {
+    top: calc(50% - 6px);
+  }
+
+  /* 연도 꼬리표: 사진 반대편 */
+  :global(html.is-horizontal) .year-tag {
+    position: absolute;
+    left: 44px;
+    top: calc(50% + var(--space-2));
+    margin: 0;
+  }
+
+  :global(html.is-horizontal) .event:nth-child(even) .year-tag {
+    top: auto;
+    bottom: calc(50% + var(--space-2));
+  }
+
+  /* 가로 모드 캡션은 제목과 날짜만. 화면이 충분히 높을 때만 요약 두 줄을 더한다. */
+  :global(html.is-horizontal) .summary {
+    display: none;
+  }
+
+  @media (min-height: 800px) {
+    :global(html.is-horizontal) .event:not([data-importance='1']) .summary {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+
+  :global(html.is-horizontal) .tags {
+    display: none;
+  }
+</style>

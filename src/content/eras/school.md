@@ -1,0 +1,14 @@
+---
+title: 학창 시절
+subtitle: 친구, 시험, 그리고 처음 품은 꿈
+start: 2011
+end: 2016
+theme:
+  bg: "#5d4636"
+  fg: "#fbf1e4"
+  accent: "#f3c58f"
+  muted: "#e0cdb8"
+  font: sign
+---
+
+(예시) 학창 시절을 돌아보는 소개 글.

@@ -1,23 +1,42 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title?: string;
   description?: string;
+  // html에 적용할 시대 테마 CSS 변수 (상세 페이지용)
+  themeStyle?: string;
 }
 
 const {
-  title = 'C2LV — Life Archive',
-  description = '삶의 흐름을 따라 걷는 개인 아카이브',
+  title = '밤팔이 사진관',
+  description = '1998년부터 찍어 온 사진을 시대별로 걸어 둔 개인 아카이브',
+  themeStyle,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="ko">
+<html lang="ko" style={themeStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
+
+    <!--
+      글꼴: 간판 Do Hyeon, 본문 Gowun Dodum, 시대별 선택 Gowun Batang · Gaegu.
+      날짜 각인 DSEG7은 global.css의 @font-face로 jsdelivr에서 받는다.
+    -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gaegu:wght@700&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap"
+    />
+
+    <slot name="head" />
   </head>
   <body>
     <slot />
