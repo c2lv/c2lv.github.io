@@ -10,5 +10,3 @@ theme:
   muted: "#e0cdb8"
   font: sign
 ---
-
-(예시) 학창 시절을 돌아보는 소개 글.

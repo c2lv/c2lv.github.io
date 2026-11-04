@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { event, era, sizes, widths, eager = false, class: className } = Astro.props;
-const { cover, coverAlt, date } = event.data;
+const { cover, coverAlt, coverPosition, date } = event.data;
 ---
 
 <div class:list={['photo', !cover && 'backdrop', className]} style={era ? eraBackdropStyle(era) : undefined}>
@@ -31,6 +31,7 @@ const { cover, coverAlt, date } = event.data;
         widths={widths}
         sizes={sizes}
         loading={eager ? 'eager' : 'lazy'}
+        style={coverPosition ? `object-position: ${coverPosition}` : undefined}
       />
     )
   }

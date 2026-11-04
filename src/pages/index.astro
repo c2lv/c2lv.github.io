@@ -8,8 +8,11 @@ import { eraThemeCss } from '../lib/theme';
 const timeline = await getTimeline();
 const themeCss = eraThemeCss(timeline.eras.map((t) => t.era));
 
-// 진열장에 거는 세 장: 첫 사진, 가운데쯤의 주요 사진, 가장 최근 사진
-const all = timeline.eras.flatMap((e) => e.items.map((item) => ({ ...item, era: e.era })));
+// 진열장에 거는 세 장: 첫 사진, 가운데쯤의 주요 사진, 가장 최근 사진.
+// 진열장은 실제 사진이 있는 사건으로만 채운다 (사진이 하나도 없으면 전체 사건에서 고른다).
+const everything = timeline.eras.flatMap((e) => e.items.map((item) => ({ ...item, era: e.era })));
+const withPhoto = everything.filter((i) => i.event.data.cover);
+const all = withPhoto.length > 0 ? withPhoto : everything;
 const first = all[0];
 const last = all[all.length - 1];
 const middle =
@@ -48,9 +51,7 @@ const showcase = [first, middle, last].filter((x, i, arr) => x && arr.indexOf(x)
         <span class="sign-name">밤팔이</span>
         <span class="sign-shop">사진관</span>
       </h1>
-      <p class="sign-sub">
-        {timeline.firstYear}년부터 찍어 온 사진 {timeline.total}장을 시대별로 걸어 두었습니다.
-      </p>
+      <p class="sign-sub">온라인에 남겨진 밤팔이 박현준의 흔적들을 모아 둔 아카이브입니다.</p>
     </div>
 
     <div class="window" aria-label="진열된 사진">

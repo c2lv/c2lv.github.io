@@ -9,5 +9,3 @@ theme:
   muted: "#c9cdcc"
   font: serif
 ---
-
-(예시) 지금까지 이어지는 시대. `end`를 비워두면 '현재'로 표시된다.

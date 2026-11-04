@@ -43,9 +43,34 @@ const events = defineCollection({
       place: z.string().optional(),
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      // 사진이 3:2로 잘릴 때 보일 부분 (CSS object-position). 세로 사진은 '50% 15%'처럼 위쪽을 지정한다.
+      coverPosition: z.string().optional(),
       // 1: 작은 카드, 2: 기본, 3: 크게 강조
       importance: z.number().int().min(1).max(3).default(2),
       tags: z.array(z.string()).default([]),
+      // 이 사건이 기록된 곳 (뉴스 기사, 게시글 등). 상세 페이지 아래 "기록이 남은 곳"에 표시된다.
+      sources: z
+        .array(
+          z.object({
+            title: z.string(),
+            // 언론사·사이트 이름
+            publisher: z.string().optional(),
+            url: z.url(),
+            // 원문이 사라질 때를 대비한 보존본 (Wayback Machine, archive.today 등)
+            archive: z.url().optional(),
+          }),
+        )
+        .default([]),
+      // 함께 보관한 파일 (뉴스 영상, PDF 등). public/media/<사건 파일 이름>/ 에 두고 /media/... 경로로 적는다.
+      attachments: z
+        .array(
+          z.object({
+            type: z.enum(['video', 'pdf']),
+            title: z.string(),
+            src: z.string().startsWith('/media/'),
+          }),
+        )
+        .default([]),
       // true면 빌드에서 제외된다. 레포 원본에는 남으므로 민감한 내용은 레포에 넣지 말 것.
       private: z.boolean().default(false),
     }),

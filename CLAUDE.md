@@ -14,7 +14,23 @@
 - 사건: `src/content/events/<YYYY-MM-slug>.md` — `title`, `date`, `era`(시대 id), `summary`, `place`, `cover`, `coverAlt`, `importance`(1–3), `tags`, `private`
 - 스키마: `src/content.config.ts`
 - `private: true`는 빌드에서만 빠진다. 레포가 공개이므로 원본 파일은 누구나 볼 수 있다. 민감한 내용은 레포에 넣지 않는다.
-- 커버 사진은 사건 md 옆(또는 `src/assets/`)에 두고 상대 경로로 지정한다. `public/`에 두지 않는다 (자동 압축이 안 됨).
+- 사진: `src/assets/events/<사건 파일 이름>/`에 넣고 `cover: ../../assets/events/<사건 파일 이름>/cover.jpg`, `coverAlt: 사진 설명`으로 지정한다. 본문에 사진을 더 넣으려면 같은 폴더를 `![설명](../../assets/events/<id>/2.jpg)`로 참조한다. `public/`에 두지 않는다 (자동 압축이 안 됨).
+- 기사·게시글 출처: `sources`에 적는다. 상세 페이지 "기록이 남은 곳"에 표시된다.
+  ```yaml
+  sources:
+    - title: 기사 제목
+      publisher: 언론사
+      url: https://원문주소
+      archive: https://web.archive.org/web/원문주소   # 보존본 (선택)
+  ```
+- 영상·PDF: `public/media/<사건 파일 이름>/`에 넣고 `attachments`에 적는다. 상세 페이지 "함께 보관한 자료"에 영상 플레이어와 PDF 링크로 표시된다. GitHub는 50MB 넘는 파일에 경고하고 100MB 넘는 파일은 거부한다.
+  ```yaml
+  attachments:
+    - type: video   # video 또는 pdf
+      title: 영상 설명
+      src: /media/<id>/파일.mp4
+  ```
+- 보존본: https://web.archive.org/save 에 원문 주소를 넣으면 Wayback Machine에 사본이 생긴다. 기사 본문 전체를 캡처해 레포에 올리면 저작권 문제가 될 수 있으므로, 레포에는 내가 찍은 사진·내 작업 화면만 넣고 기사는 링크와 보존본으로 남긴다.
 
 ## 디자인
 

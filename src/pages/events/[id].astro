@@ -23,7 +23,9 @@ interface Props {
 }
 
 const { event, no, total, prev, next } = Astro.props;
-const { title, date, summary, place, tags } = event.data;
+const { title, date, summary, place, tags, sources, attachments } = event.data;
+const videos = attachments.filter((a) => a.type === 'video');
+const files = attachments.filter((a) => a.type !== 'video');
 const era = await getEntry(event.data.era);
 if (!era) throw new Error(`사건 "${event.id}"의 시대 "${event.data.era.id}"를 찾을 수 없습니다.`);
 const { Content } = await render(event);
@@ -56,6 +58,54 @@ const { Content } = await render(event);
         <p class="summary">{summary}</p>
 
         <div class="prose"><Content /></div>
+
+        {
+          attachments.length > 0 && (
+            <section class="attachments" aria-labelledby="attachments-title">
+              <h2 id="attachments-title">함께 보관한 자료</h2>
+              {videos.map((v) => (
+                <figure class="video">
+                  <video controls preload="metadata" src={v.src} />
+                  <figcaption>{v.title}</figcaption>
+                </figure>
+              ))}
+              {files.length > 0 && (
+                <ul class="files">
+                  {files.map((f) => (
+                    <li>
+                      <a href={f.src} target="_blank" rel="noopener">
+                        {f.title} (PDF)
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )
+        }
+
+        {
+          sources.length > 0 && (
+            <section class="sources" aria-labelledby="sources-title">
+              <h2 id="sources-title">기록이 남은 곳</h2>
+              <ul>
+                {sources.map((s) => (
+                  <li>
+                    {s.publisher && <span class="publisher">{s.publisher}</span>}
+                    <a href={s.url} rel="noopener">
+                      {s.title}
+                    </a>
+                    {s.archive && (
+                      <a class="archive" href={s.archive} rel="noopener">
+                        보존본 보기
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
 
         {
           tags.length > 0 && (
@@ -173,6 +223,84 @@ const { Content } = await render(event);
 
   .prose :global(img) {
     margin-block: var(--space-6);
+  }
+
+  /* 함께 보관한 자료: 영상은 바로 재생, 문서는 새 탭에서 열기 */
+  .attachments {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  }
+
+  .attachments h2 {
+    font-size: 18px;
+  }
+
+  .video {
+    margin: var(--space-3) 0 0;
+  }
+
+  .video video {
+    display: block;
+    width: 100%;
+    background: var(--ink);
+  }
+
+  .video figcaption {
+    margin-top: var(--space-1);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .files {
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 15px;
+  }
+
+  .files a {
+    color: var(--envelope-ink);
+  }
+
+  /* 기록이 남은 곳: 사진 뒷면에 붙인 출처 메모 */
+  .sources {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  }
+
+  .sources h2 {
+    font-size: 18px;
+  }
+
+  .sources ul {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sources li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    font-size: 15px;
+  }
+
+  .sources a {
+    color: var(--envelope-ink);
+  }
+
+  .publisher {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .archive {
+    font-size: 13px;
   }
 
   .tags {
