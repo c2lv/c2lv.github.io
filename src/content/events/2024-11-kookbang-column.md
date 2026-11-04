@@ -8,6 +8,10 @@ tags: [글쓰기, 군대]
 cover: ../../assets/events/2024-11-kookbang-column/article.png
 coverAlt: 국방일보 병영의창 기사 화면. 제목 늦은 시작, 새로운 도약과 군복 차림의 박현준 이병 사진
 coverPosition: 50% 55%
+attachments:
+  - type: pdf
+    title: 국방일보 기사 저장본
+    src: /media/2024-11-kookbang-column/kookbang-article.pdf
 sources:
   - title: 늦은 시작, 새로운 도약
     publisher: 국방일보
