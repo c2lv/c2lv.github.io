@@ -6,15 +6,13 @@ const fontVar = {
   hand: 'var(--font-hand)',
 } as const;
 
-function eraDeclarations(era: Era): string[] {
+function colorDeclarations(era: Era): string[] {
   const t = era.data.theme;
-  return [
-    `--bg: ${t.bg}`,
-    `--fg: ${t.fg}`,
-    `--accent: ${t.accent}`,
-    `--muted: ${t.muted}`,
-    `--font-display: ${fontVar[t.font]}`,
-  ];
+  return [`--bg: ${t.bg}`, `--fg: ${t.fg}`, `--accent: ${t.accent}`, `--muted: ${t.muted}`];
+}
+
+function eraDeclarations(era: Era): string[] {
+  return [...colorDeclarations(era), `--font-display: ${fontVar[era.data.theme.font]}`];
 }
 
 /** 빈 사진(.backdrop)이 자기 시대 배경지 색을 갖도록 --bg만 지정한다. */
@@ -37,8 +35,10 @@ export function eraThemeCss(eras: Era[]): string {
   return eras
     .map((era) => {
       const id = JSON.stringify(era.id);
-      const body = eraDeclarations(era).join('; ');
-      // 제목 글꼴은 보간되지 않으므로 JS 유무와 관계없이 각 시대 섹션이 자기 글꼴을 갖는다.
+      const body = colorDeclarations(era).join('; ');
+      // 제목 글꼴은 html이 아니라 각 시대 섹션에만 준다. html에 주면 시대가 바뀔 때 사진관 입구 간판
+      // 글꼴까지 바뀌어 문서 높이가 달라지고, 브라우저 스크롤 앵커링이 스크롤 위치를 밀어
+      // 시대 경계에서 화면이 좌우로 계속 흔들린다.
       const font = `.era[data-era=${id}] { --font-display: ${fontVar[era.data.theme.font]}; }`;
       return `html:not(.js-theme) .era[data-era=${id}], html.js-theme[data-active-era=${id}] { ${body}; }
 ${font}`;

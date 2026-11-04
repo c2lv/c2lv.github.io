@@ -401,6 +401,11 @@ const showcase = [first, middle, last].filter((x, i, arr) => x && arr.indexOf(x)
 
   /* ---------- 가로 모드 ---------- */
 
+  /* 스크롤 위치는 timeline.ts가 정한다. 브라우저 스크롤 앵커링이 끼어들면 가로 위치가 튄다. */
+  :global(html.is-horizontal) {
+    overflow-anchor: none;
+  }
+
   :global(html.is-horizontal) .timeline {
     position: relative;
   }
