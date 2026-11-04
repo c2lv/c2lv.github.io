@@ -25,6 +25,14 @@ const {
     <title>{title}</title>
 
     <!--
+      검색 색인·AI 학습 거부. public/robots.txt, public/.well-known/tdmrep.json과 함께 쓴다.
+      GitHub Pages는 응답 헤더(X-Robots-Tag)를 지정할 수 없어 페이지마다 meta로 알린다.
+    -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="tdm-reservation" content="1" />
+
+    <!--
       글꼴: 간판 Do Hyeon, 본문 Gowun Dodum, 시대별 선택 Gowun Batang · Gaegu.
       날짜 각인 DSEG7은 global.css의 @font-face로 jsdelivr에서 받는다.
     -->

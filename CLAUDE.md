@@ -32,6 +32,14 @@
   ```
 - 보존본: https://web.archive.org/save 에 원문 주소를 넣으면 Wayback Machine에 사본이 생긴다. 기사 본문 전체를 캡처해 레포에 올리면 저작권 문제가 될 수 있으므로, 레포에는 내가 찍은 사진·내 작업 화면만 넣고 기사는 링크와 보존본으로 남긴다.
 
+## 수집 거부
+
+검색 색인, 크롤링, AI 학습을 거부한다. 네 곳이 함께 동작하므로 하나만 지우지 않는다.
+- `public/robots.txt`: 모든 봇 `Disallow: /`, AI 봇 이름도 따로 나열
+- `src/layouts/Base.astro`: `robots`(noindex, noai 등), `googlebot`, `tdm-reservation` meta
+- `public/.well-known/tdmrep.json`: TDM 권리 유보 (EU 텍스트·데이터 마이닝 예외 거부)
+- `public/ai.txt`: AI 사용 거부 문구
+
 ## 디자인
 
 디자인, CSS, 컴포넌트, 시대 테마, 스크롤 동작을 바꾸기 전에 `.claude/skills/life-design/SKILL.md`를 읽는다.

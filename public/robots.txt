@@ -1,0 +1,42 @@
+# 밤팔이 사진관 — 개인 아카이브
+# 검색 엔진 색인, 크롤링, AI 학습용 수집을 모두 허용하지 않습니다.
+
+User-agent: *
+Disallow: /
+
+# AI 학습·수집 봇 (자기 이름의 규칙만 읽는 봇이 있어 따로 적어 둔다)
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: Claude-Web
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: GoogleOther
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Bytespider
+User-agent: Meta-ExternalAgent
+User-agent: Meta-ExternalFetcher
+User-agent: FacebookBot
+User-agent: Amazonbot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: ImagesiftBot
+User-agent: Omgilibot
+User-agent: Omgili
+User-agent: YouBot
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: PetalBot
+User-agent: Timpibot
+User-agent: Webzio-Extended
+User-agent: img2dataset
+Disallow: /
