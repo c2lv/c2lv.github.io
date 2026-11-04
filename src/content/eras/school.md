@@ -1,6 +1,5 @@
 ---
 title: 학창 시절
-subtitle: 친구, 시험, 그리고 처음 품은 꿈
 start: 2011
 end: 2016
 theme:

@@ -41,11 +41,17 @@ const headingId = `era-${era.id}-title`;
           <dd class="written">{items.length}장</dd>
         </div>
       </dl>
-      <div class="env-memo">
-        <p class="env-print">메모</p>
-        {era.data.subtitle && <p class="written subtitle">{era.data.subtitle}</p>}
-        <div class="intro"><Content /></div>
-      </div>
+      {
+        (era.data.subtitle || era.body?.trim()) && (
+          <div class="env-memo">
+            <p class="env-print">메모</p>
+            {era.data.subtitle && <p class="written subtitle">{era.data.subtitle}</p>}
+            <div class="intro">
+              <Content />
+            </div>
+          </div>
+        )
+      }
     </header>
 
     {
